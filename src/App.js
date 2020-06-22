@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import logo from './logo.svg';
-import './App.css';
+import Feed from "./Feed/Feed";
+import TextBar from "./TextBar/TextBar";
+import Message from "./Feed/Message/Message";
+
+const AppContainter = styled.div`
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    
+`;
+
+const msgA = <Message text={'hello'} iconSide={'left'} />
+const msgB = <Message text={'tomer kohn'} iconSide={'right'} />
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <AppContainter>
+          <Feed messages={[msgA,msgB]}/>
+          <TextBar/>
+      </AppContainter>
     );
   }
 }
