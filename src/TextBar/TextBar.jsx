@@ -41,26 +41,36 @@ class TextBar extends Component {
     this.state = {value: ''};
 
     this.handleChange = this.handleChange.bind(this);
-    //this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePressSend = this.handlePressSend(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
+  handlePressSend(e) {
+    if (e.keyCode === 13) {
+      this.handleSubmit(this.state.value);
+    }
+  }
+
+  handleSubmit(value) {
+    this.props.onSubmit(value);
+    this.setState({value: ''});
+  }
+
   render() {
+    const { value } = this.state;
     return (
         <Container>
-            <Input type="text" value={this.state.value} onChange={this.handleChange} />
-          <Button>
+          <Input type="text" value={value} onChange={this.handleChange} onKeyDown={this.handlePressSend}/>
+          <Button onClick={ () => this.handleSubmit(value)}>
             <SubmitIcon src={submitIcon} alt="submit button icon"/>
           </Button>
         </Container>
     )
   }
-
-
 }
-
 
 export default TextBar;
