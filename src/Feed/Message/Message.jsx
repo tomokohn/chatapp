@@ -34,7 +34,7 @@ const AvatarImg = styled.img`
 
 const Message = ({text, isBot, showAvatar, last}) => (
   <MassageContainer bot={isBot}>
-    { showAvatar ? <AvatarImg src={isBot ?botAvatar : userAvatar} alt=""/> : null}
+    { showAvatar && <AvatarImg src={ isBot ? botAvatar : userAvatar} alt=""/>}
     <Text last={last} bot={isBot}>{text}</Text>
   </MassageContainer>
 );

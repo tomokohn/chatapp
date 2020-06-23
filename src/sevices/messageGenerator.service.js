@@ -2,11 +2,12 @@
 import React from "react";
 import Message from "../Feed/Message/Message";
 
-export const composeMessage  = ({text, isBot, last, showAvatar}) => (
+export const composeMessage  = ({text, isBot, last, showAvatar, key}) => (
   <Message text={text}
            last={last}
            isBot={isBot}
            showAvatar={showAvatar}
+           key={key}
   />
 );
 
