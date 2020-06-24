@@ -16,6 +16,7 @@ const Input = styled.input`
   height: 40px;
   border-radius: 5px;
   border: 1px solid darkgray;
+  outline: none;
 `;
 
 const Button = styled.button`
@@ -27,7 +28,7 @@ const Button = styled.button`
   align-items: center;
   
   &:focus {
-    outline-color: inherit;
+    outline: none;
   }
 `;
 
@@ -41,7 +42,7 @@ class TextBar extends Component {
     this.state = {value: ''};
 
     this.handleChange = this.handleChange.bind(this);
-    this.handlePressSend = this.handlePressSend(this);
+    this.handlePressSend = this.handlePressSend.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -56,6 +57,7 @@ class TextBar extends Component {
   }
 
   handleSubmit(value) {
+    if(!value) return;
     this.props.onSubmit(value);
     this.setState({value: ''});
   }
@@ -64,7 +66,7 @@ class TextBar extends Component {
     const { value } = this.state;
     return (
         <Container>
-          <Input type="text" value={value} onChange={this.handleChange} onKeyDown={this.handlePressSend}/>
+          <Input type="text" value={value} onChange={this.handleChange} onKeyDown={this.handlePressSend} />
           <Button onClick={ () => this.handleSubmit(value)}>
             <SubmitIcon src={submitIcon} alt="submit button icon"/>
           </Button>

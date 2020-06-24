@@ -10,6 +10,7 @@ const Continer = styled.div`
   background: #e9e9e9;
   padding: 12px;
   border-radius: ${props => applyRadius(props.last)};
+  border-radius: ${props => props.solo && !props.last && '24px'};
   margin-block-start: 3px;
   margin-block-end: 0;
   grid-column: 2;

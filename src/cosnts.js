@@ -4,8 +4,7 @@ export const MAYA_ASKS_EXPRRSION = 'List any mathematical expression you can thi
 export const MAYA_HAVE_NAME_PART_ONE = 'Nice to meet you';
 export const MAYA_HAVE_NAME_PART_TWO = '!';
 export const MAYA_GREETING_RETURN_PART_ONE = 'Nice to see you again';
-export const MAYA_GREETING_RETURN_PART_TWO = '. Let’s pick this up from\n' +
-  'where we left off';
+export const MAYA_GREETING_RETURN_PART_TWO = '. Let’s pick this up from\n where we left off';
 export const MAYA_ASKS_MORE = 'This was easy, give me something harder 🤓';
 export const MAYA_TYPING_TIME = 2000;
 

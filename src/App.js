@@ -9,25 +9,18 @@ import {
     askNameMessage,
     askExpressionMessage,
     askMoreMessage,
-    MAYA_TYPING_TIME,
-    MAYA_HAVE_NAME_PART_ONE,
-    MAYA_HAVE_NAME_PART_TWO,
-    MAYA_GREETING_RETURN_PART_ONE,
-MAYA_GREETING_RETURN_PART_TWO
+    MAYA_TYPING_TIME
   } from './cosnts';
 
 const AppContainter = styled.div`
-    max-width: 460px;
+    max-width: 480px;
     margin: 0 auto;
     border: 1px solid black;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     height: 100%;
 `;
-
-
-
 
 class App extends Component {
   constructor(props) {
@@ -50,17 +43,19 @@ class App extends Component {
       const expressionMessage = {text: message, isBot: false, showAvatar: true};
       const expressionResult = calculator(message);
       const resultMessage = {text: expressionResult, isBot: true};
-      this.setState({messages: [...messages, expressionMessage, resultMessage]}, () => this.addMessagesToFeedQeue(askMoreMessage));
+      this.setState(prevState =>({messages: [ ...prevState.messages, expressionMessage, resultMessage]}), () => this.addMessagesToFeedQeue(askMoreMessage));
     } else {
       const userNameMessage = {text: message, isBot: false, showAvatar: true};
       const greetingWithNameMessage = {text: botGreeting(message, true), isBot: true, showAvatar: true};
-      this.setState({messages: [...messages, userNameMessage, greetingWithNameMessage], userName: message}, () => this.addMessagesToFeedQeue(askExpressionMessage));
+      this.setState(prevState =>({messages: [...prevState.messages, userNameMessage, greetingWithNameMessage], userName: message}), () => this.addMessagesToFeedQeue(askExpressionMessage));
       localStorage.setItem('userName', message)
     }
   }
 
   addMessagesToFeedQeue(message) {
-    setTimeout(()=> this.setState({messages: [...this.state.messages, message]}), MAYA_TYPING_TIME);
+    const { messages } = this.state;
+    if (messages[messages.length - 1].text === message.text) return;
+    setTimeout(()=> this.setState(prevState =>({messages: [...prevState.messages, message]})), MAYA_TYPING_TIME);
   }
 
   render() {
@@ -75,3 +70,5 @@ class App extends Component {
 }
 
 export default App;
+
+

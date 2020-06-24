@@ -1,12 +1,14 @@
 {
   "name": "chatapp",
   "version": "0.1.0",
+  "homepage": "http://tomer-k.com/chatapp",
   "private": true,
   "dependencies": {
     "mathjs": "^7.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "0.9.x",
+    "react-scroll-to-bottom": "^3.0.0",
     "styled-components": "^5.1.1"
   },
   "devDependencies": {},
