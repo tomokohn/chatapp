@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import botAvatar from '../../assets/mayas_avatar.png';
 import userAvatar from '../../assets/user_avatar.png';
+import TypingLoader from "./Typing-loder/TypingLoader";
+import {MAYA_TYPING_TIME} from "../../cosnts";
 
 
 const applyRadius = (last) => last ? '0 15px 15px 15px' : '15px 15px 15px 0';
@@ -25,6 +27,7 @@ const Text = styled.p`
   margin-block-end: 0;
   grid-column: 2;
   color: ${ props => props.bot ? '#000' : '#fbfbfb'};
+  direction: ltr;
 `;
 
 const AvatarImg = styled.img`
@@ -32,11 +35,26 @@ const AvatarImg = styled.img`
   padding: 0 5px;
 `;
 
-const Message = ({text, isBot, showAvatar, last}) => (
-  <MassageContainer bot={isBot}>
-    { showAvatar && <AvatarImg src={ isBot ? botAvatar : userAvatar} alt=""/>}
-    <Text last={last} bot={isBot}>{text}</Text>
-  </MassageContainer>
-);
+class Message extends Component {
+  constructor() {
+    super();
+    this.state = {
+      showTyping: true
+    }
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.setState({showTyping: false}), MAYA_TYPING_TIME);
+  }
+  render() {
+    const {text, isBot, showAvatar, last} = this.props;
+    return (
+      <MassageContainer bot={isBot}>
+        { showAvatar && <AvatarImg src={ isBot ? botAvatar : userAvatar} alt=""/>}
+        { isBot && this.state.showTyping ? <TypingLoader last={last}/> : <Text last={last} bot={isBot} >{text} </Text>}
+      </MassageContainer>
+    )
+  }
+};
 
 export default Message;

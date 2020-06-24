@@ -8,7 +8,12 @@ import {
     greetingMessage,
     askNameMessage,
     askExpressionMessage,
-    askMoreMessage
+    askMoreMessage,
+    MAYA_TYPING_TIME,
+    MAYA_HAVE_NAME_PART_ONE,
+    MAYA_HAVE_NAME_PART_TWO,
+    MAYA_GREETING_RETURN_PART_ONE,
+MAYA_GREETING_RETURN_PART_TWO
   } from './cosnts';
 
 const AppContainter = styled.div`
@@ -30,12 +35,13 @@ class App extends Component {
     this.handleUserMessage = this.handleUserMessage.bind(this);
 
     const userName = localStorage.getItem('userName') || '';
-    const firstMessage = userName ? {text: botGreeting(userName), isBot: true} : greetingMessage;
+    const firstMessage = userName ? {text: botGreeting(userName,), isBot: true} : greetingMessage;
     const secondMessage = userName ? askExpressionMessage : askNameMessage;
     this.state = {
-      messages: [firstMessage,secondMessage],
+      messages: [firstMessage],
       userName: userName
     }
+    this.addMessagesToFeedQeue(secondMessage);
   }
 
   handleUserMessage(message) {
@@ -44,12 +50,17 @@ class App extends Component {
       const expressionMessage = {text: message, isBot: false, showAvatar: true};
       const expressionResult = calculator(message);
       const resultMessage = {text: expressionResult, isBot: true};
-      this.setState({messages: [...messages, expressionMessage, resultMessage, askMoreMessage]});
+      this.setState({messages: [...messages, expressionMessage, resultMessage]}, () => this.addMessagesToFeedQeue(askMoreMessage));
     } else {
       const userNameMessage = {text: message, isBot: false, showAvatar: true};
-      const greetingWithNameMessage = {text: botGreeting(message), isBot: true, showAvatar: true};
-      this.setState({messages: [...messages, userNameMessage, greetingWithNameMessage, askExpressionMessage]}, () => localStorage.setItem('userName', message));
+      const greetingWithNameMessage = {text: botGreeting(message, true), isBot: true, showAvatar: true};
+      this.setState({messages: [...messages, userNameMessage, greetingWithNameMessage], userName: message}, () => this.addMessagesToFeedQeue(askExpressionMessage));
+      localStorage.setItem('userName', message)
     }
+  }
+
+  addMessagesToFeedQeue(message) {
+    setTimeout(()=> this.setState({messages: [...this.state.messages, message]}), MAYA_TYPING_TIME);
   }
 
   render() {

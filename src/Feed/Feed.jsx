@@ -2,7 +2,6 @@ import React from 'react';
 import styled from "styled-components";
 import { composeMessage } from '../sevices/messageGenerator.service';
 
-
 const FeedContainer = styled.div`
     overflow-y: auto;
     -ms-overflow-style: none;
