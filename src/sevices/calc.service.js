@@ -6,7 +6,7 @@ const calculator =  (expresion) => {
   try {
     return evaluate(expresion).toString();
   } catch (e) {
-    return MAYA_FALSE_EXPRESSION
+    return MAYA_FALSE_EXPRESSION;
   }
 
 };

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import submitIcon from '../assets/submit_icon.png'
+import submitIcon from '../../assets/submit_icon.png'
 
 const Container = styled.div`
     background: #f8f8f8;

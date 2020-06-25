@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
-import { composeMessage } from '../sevices/messageGenerator.service';
+import { composeMessage } from '../../sevices/messageGenerator.service';
 
 const FeedContainer = styled.div`
     overflow-y: auto;
@@ -39,7 +39,7 @@ class Feed extends Component {
 
   render() {
     return (
-      <FeedContainer ref={this.feed}>
+      <FeedContainer className="feed" ref={this.feed}>
         {this.props.messages.map((msg, i, arr) =>
           composeMessage({
             ...msg,

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import botAvatar from '../../assets/mayas_avatar.png';
-import userAvatar from '../../assets/user_avatar.png';
-import TypingLoader from "./Typing-loder/TypingLoader";
-import {MAYA_TYPING_TIME} from "../../cosnts";
+import botAvatar from '../../../assets/mayas_avatar.png';
+import userAvatar from '../../../assets/user_avatar.png';
+import TypingLoader from './TypingLoader/TypingLoader';
+import {MAYA_TYPING_TIME} from "../../../cosnts";
 
 
 const applyRadius = (last) => last ? '0 20px 20px 20px' : '20px 20px 20px 0';
@@ -57,7 +57,7 @@ class Message extends Component {
     const avatar = isBot ? botAvatar : userAvatar;
     const imgAltText = isBot ? 'Maya\'s avatar' : 'User\'s avatar';
     return (
-      <MassageContainer bot={isBot} ref={this.message}>
+      <MassageContainer className="message" bot={isBot} ref={this.message}>
         { showAvatar && <AvatarImg src={ avatar } alt={ imgAltText }/>}
         { isBot && showTyping ? <TypingLoader last={last} solo={ showTyping }/> : <Text last={last} bot={isBot} brake={this.textWidth}>{text}</Text>}
       </MassageContainer>

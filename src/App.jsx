@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import calculator from './sevices/calc.service';
 import {botGreeting, randomAnswer} from './sevices/messageGenerator.service';
-import Feed from "./Feed/Feed";
-import TextBar from "./TextBar/TextBar";
+import Feed from "./components/Feed/Feed";
+import TextBar from "./components/TextBar/TextBar";
 import {
     greetingMessage,
     askNameMessage,
@@ -29,13 +29,13 @@ class App extends Component {
     this.dedupBotAnswers = this.dedupBotAnswers.bind(this);
 
     const userName = localStorage.getItem('userName') || '';
-    const firstMessage = userName ? {text: botGreeting(userName,), isBot: true} : greetingMessage;
+    const firstMessage = userName ? {text: botGreeting(userName), isBot: true} : greetingMessage;
     const secondMessage = userName ? askExpressionMessage : askNameMessage;
     this.state = {
       messages: [firstMessage],
       userName: userName,
       currentAnswer: 0
-    }
+    };
     this.addMessagesToFeedQeue(secondMessage);
   }
 
