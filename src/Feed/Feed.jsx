@@ -38,7 +38,6 @@ class Feed extends Component {
   };
 
   render() {
-
     return (
       <FeedContainer ref={this.feed}>
         {this.props.messages.map((msg, i, arr) =>

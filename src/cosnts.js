@@ -5,7 +5,13 @@ export const MAYA_HAVE_NAME_PART_ONE = 'Nice to meet you';
 export const MAYA_HAVE_NAME_PART_TWO = '!';
 export const MAYA_GREETING_RETURN_PART_ONE = 'Nice to see you again';
 export const MAYA_GREETING_RETURN_PART_TWO = '. Let’s pick this up from\n where we left off';
-export const MAYA_ASKS_MORE = 'This was easy, give me something harder 🤓';
+export const MAYA_ASKS_MORE = [
+  'This was easy, give me something harder 🤓',
+  'This is fun! another one',
+  'Wow, I\'m getting good at this! give me more',
+  'Give me somthing harder 💪'
+];
+export const MAYA_FALSE_EXPRESSION ='This is not amathematical expression'
 export const MAYA_TYPING_TIME = 2000;
 
 export const greetingMessage = {text: MAYA_FIRST_GREETING, isBot: true};
