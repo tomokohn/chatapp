@@ -13,6 +13,7 @@ import {
   } from './cosnts';
 
 const AppContainter = styled.div`
+    position: relative;
     max-width: 480px;
     margin: 0 auto;
     border: 1px solid black;

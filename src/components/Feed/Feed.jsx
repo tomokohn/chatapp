@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import { composeMessage } from '../../sevices/messageGenerator.service';
+import ScrollBottom from "./ScrollBottom/ScrollBottom";
 
 const FeedContainer = styled.div`
     overflow-y: auto;
     padding-bottom: 15px;
+    scroll-behavior: smooth;
     -ms-overflow-style: none;
     &::-webkit-scrollbar {
       display: none;
@@ -15,16 +17,30 @@ const FeedContainer = styled.div`
 class Feed extends Component {
   constructor(props) {
     super();
-    this.feed = React.createRef()
+    this.state = {
+      showScrollBtn: false
+    }
+    this.feed = React.createRef();
+
+    this.scrollBottom = this.scrollBottom.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
-  componentDidUpdate() {
-    this.scrollBottom()
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.messages.length !== this.props.messages.length) this.scrollBottom();
+  }
+
+  handleScroll() {
+    const feed = this.feed.current;
+    const shouldshowBtn = feed.scrollHeight > feed.scrollTop + 800;
+    if (feed.scrollHeight - feed.scrollTop === feed.clientHeight) {
+      this.setState({showScrollBtn: false });
+    } else if (shouldshowBtn) this.setState({showScrollBtn: true });
   }
 
   scrollBottom() {
     const feed = this.feed.current;
-    feed.scrollTop = feed.scrollHeight - feed.clientHeight;
+    feed.scrollTop = feed.scrollHeight - feed.clientHeight;;
   }
 
   shouldShowAvatar(isBot, index, array) {
@@ -39,7 +55,7 @@ class Feed extends Component {
 
   render() {
     return (
-      <FeedContainer className="feed" ref={this.feed}>
+      <FeedContainer className="feed" ref={this.feed} onScroll={this.handleScroll}>
         {this.props.messages.map((msg, i, arr) =>
           composeMessage({
             ...msg,
@@ -47,6 +63,7 @@ class Feed extends Component {
             showAvatar: this.shouldShowAvatar(msg.isBot, i, arr)
           })
         )}
+        { this.state.showScrollBtn  && <ScrollBottom onClickDown={()=> this.scrollBottom()}/>}
       </FeedContainer>
     )
   }

@@ -67,7 +67,7 @@ class TextBar extends Component {
     return (
         <Container>
           <Input type="text" value={value} onChange={this.handleChange} onKeyDown={this.handlePressSend} />
-          <Button onClick={ () => this.handleSubmit(value)}>
+          <Button onClick={() => this.handleSubmit(value)}>
             <SubmitIcon src={submitIcon} alt="submit button icon"/>
           </Button>
         </Container>
