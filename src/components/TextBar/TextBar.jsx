@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import submitIcon from '../../assets/submit_icon.png'
 
@@ -36,43 +36,45 @@ const SubmitIcon = styled.img`
   width: 20px;
 `;
 
-class TextBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {value: ''};
+const initialState = '';
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handlePressSend = this.handlePressSend.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+const TextBar = ({onSubmit}) => {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {value: ''};
+
+  //   this.handleChange = this.handleChange.bind(this);
+  //   this.handlePressSend = this.handlePressSend.bind(this);
+  //   this.handleSubmit = this.handleSubmit.bind(this);
+  // }
+
+  const [value, setValue] = useState(initialState)
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    //this.setState({value: event.target.value});
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  const handleSubmit = (value) => {
+    if (!value) return;
+    onSubmit(value);
+    setValue('');
+    //this.setState({value: ''});
   }
 
-  handlePressSend(e) {
+  const handlePressSend = (e) => {
     if (e.keyCode === 13) {
-      this.handleSubmit(this.state.value);
+      handleSubmit(value);
     }
   }
-
-  handleSubmit(value) {
-    if(!value) return;
-    this.props.onSubmit(value);
-    this.setState({value: ''});
-  }
-
-  render() {
-    const { value } = this.state;
-    return (
-        <Container>
-          <Input type="text" value={value} onChange={this.handleChange} onKeyDown={this.handlePressSend} />
-          <Button onClick={() => this.handleSubmit(value)}>
-            <SubmitIcon src={submitIcon} alt="submit button icon"/>
-          </Button>
-        </Container>
+  return (
+    <Container>
+      <Input type="text" value={value} onChange={handleChange} onKeyDown={handlePressSend} />
+      <Button onClick={() => handleSubmit(value)}>
+        <SubmitIcon src={submitIcon} alt="submit button icon"/>
+      </Button>
+    </Container>
     )
-  }
 }
 
 export default TextBar;
