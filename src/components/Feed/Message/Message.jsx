@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import botAvatar from '../../../assets/mayas_avatar.png';
@@ -38,31 +38,33 @@ const AvatarImg = styled.img`
   padding: 0 5px;
 `;
 
-class Message extends Component {
-  constructor() {
-    super();
-    this.state = {
-      showTyping: true
-    }
-    this.message = React.createRef();
-  }
+const Message = ({ text, isBot, showAvatar, last }) =>  {
+  const [ showTyping, setShowTyping ] = useState(true);
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     showTyping: true
+  //   }
+  //   this.message = React.createRef();
+  // }
+  const message = React.createRef();
+  const textWidth = null; 
+  setTimeout(() => setShowTyping(false), MAYA_TYPING_TIME);
+  
 
-  componentDidMount() {
-    setTimeout(() => this.setState({showTyping: false,}), MAYA_TYPING_TIME);
-    this.textWidth =  this.message.current && this.message.current.clientWidth;
-  }
-  render() {
-    const {text, isBot, showAvatar, last} = this.props;
-    const { showTyping } = this.state;
-    const avatar = isBot ? botAvatar : userAvatar;
-    const imgAltText = isBot ? 'Maya\'s avatar' : 'User\'s avatar';
-    return (
-      <MassageContainer className="message" bot={isBot} ref={this.message}>
-        { showAvatar && <AvatarImg src={ avatar } alt={ imgAltText }/>}
-        { isBot && showTyping ? <TypingLoader last={last} solo={ showTyping }/> : <Text last={last} bot={isBot} brake={this.textWidth}>{text}</Text>}
-      </MassageContainer>
-    )
-  }
+  // componentDidMount() {
+  //   setTimeout(() => this.setState({showTyping: false,}), MAYA_TYPING_TIME);
+  //   this.textWidth =  this.message.current && this.message.current.clientWidth;
+  // }
+
+  const avatar = isBot ? botAvatar : userAvatar;
+  const imgAltText = isBot ? 'Maya\'s avatar' : 'User\'s avatar';
+  return (
+    <MassageContainer className="message" bot={isBot} ref={message}>
+      {showAvatar && <AvatarImg src={avatar} alt={imgAltText} />}
+      {isBot && showTyping ? <TypingLoader last={last} solo={showTyping} /> : <Text last={last} bot={isBot} brake={textWidth}>{text}</Text>}
+    </MassageContainer>
+  );
 };
 
 export default Message;

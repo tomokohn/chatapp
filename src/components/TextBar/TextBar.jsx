@@ -39,27 +39,16 @@ const SubmitIcon = styled.img`
 const initialState = '';
 
 const TextBar = ({onSubmit}) => {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {value: ''};
-
-  //   this.handleChange = this.handleChange.bind(this);
-  //   this.handlePressSend = this.handlePressSend.bind(this);
-  //   this.handleSubmit = this.handleSubmit.bind(this);
-  // }
 
   const [value, setValue] = useState(initialState)
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-    //this.setState({value: event.target.value});
-  }
+  const handleChange = (event) => setValue(event.target.value);
+  
 
   const handleSubmit = (value) => {
     if (!value) return;
     onSubmit(value);
     setValue('');
-    //this.setState({value: ''});
   }
 
   const handlePressSend = (e) => {
@@ -67,6 +56,7 @@ const TextBar = ({onSubmit}) => {
       handleSubmit(value);
     }
   }
+
   return (
     <Container>
       <Input type="text" value={value} onChange={handleChange} onKeyDown={handlePressSend} />
