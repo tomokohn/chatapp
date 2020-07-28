@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import { composeMessage } from '../../sevices/messageGenerator.service';
@@ -14,36 +14,37 @@ const FeedContainer = styled.div`
     }
 `;
 
-class Feed extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      showScrollBtn: false
-    }
-    this.feed = React.createRef();
 
-    this.scrollBottom = this.scrollBottom.bind(this);
-    this.handleScroll = this.handleScroll.bind(this);
+const Feed = ({ messages }) => {
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const feed = React.createRef();
+
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    },[]);
+    return ref.current;
+  }
+  const scrollBottom = () => {
+    const currentFeed = feed.current;
+    currentFeed.scrollTop = currentFeed.scrollHeight - currentFeed.clientHeight;
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if(prevProps.messages.length !== this.props.messages.length) this.scrollBottom();
+  const prevMessages = usePrevious(messages);
+  useEffect(() => {
+    if (prevMessages && (prevMessages.length !== messages.length)) scrollBottom();
+  }, [messages]);
+
+  const handleScroll = () => {
+    const currentFeed = feed.current;
+    const shouldshowBtn = currentFeed.scrollHeight > currentFeed.scrollTop + 800;
+    if (currentFeed.scrollHeight - currentFeed.scrollTop === currentFeed.clientHeight) {
+      setShowScrollBtn(false);
+    } else if (shouldshowBtn) setShowScrollBtn(true);
   }
 
-  handleScroll() {
-    const feed = this.feed.current;
-    const shouldshowBtn = feed.scrollHeight > feed.scrollTop + 800;
-    if (feed.scrollHeight - feed.scrollTop === feed.clientHeight) {
-      this.setState({showScrollBtn: false });
-    } else if (shouldshowBtn) this.setState({showScrollBtn: true });
-  }
-
-  scrollBottom() {
-    const feed = this.feed.current;
-    feed.scrollTop = feed.scrollHeight - feed.clientHeight;;
-  }
-
-  shouldShowAvatar(isBot, index, array) {
+  const shouldShowAvatar = (isBot, index, array) => {
     if (!isBot) return true;
     if (index === (array.length - 1)) return true;
     if (array[index].isBot && array[index + 1].isBot) {
@@ -53,21 +54,18 @@ class Feed extends Component {
     }
   };
 
-  render() {
-    return (
-      <FeedContainer className="feed" ref={this.feed} onScroll={this.handleScroll}>
-        {this.props.messages.map((msg, i, arr) =>
-          composeMessage({
-            ...msg,
-            key: i,
-            showAvatar: this.shouldShowAvatar(msg.isBot, i, arr)
-          })
-        )}
-        { this.state.showScrollBtn  && <ScrollBottom onClickDown={()=> this.scrollBottom()}/>}
-      </FeedContainer>
-    )
-  }
-
+  return (
+    <FeedContainer className="feed" ref={feed} onScroll={handleScroll}>
+      {messages.map((msg, i, arr) =>
+        composeMessage({
+          ...msg,
+          key: i,
+          showAvatar: shouldShowAvatar(msg.isBot, i, arr)
+        })
+      )}
+      {showScrollBtn && <ScrollBottom onClickDown={() => scrollBottom()} />}
+    </FeedContainer>
+  )
 }
 
 export default Feed;

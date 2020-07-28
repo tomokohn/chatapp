@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import calculator from './sevices/calc.service';
 import {botGreeting, randomAnswer} from './sevices/messageGenerator.service';
@@ -23,45 +23,51 @@ const AppContainter = styled.div`
     height: 100%;
 `;
 
-class App extends Component {
-  constructor(props) {
-    super();
-    this.handleUserMessage = this.handleUserMessage.bind(this);
-    this.dedupBotAnswers = this.dedupBotAnswers.bind(this);
+const userName = localStorage.getItem('userName') || '';
+const firstMessage = userName ? { text: botGreeting(userName), isBot: true } : greetingMessage;
+const secondMessage = userName ? askExpressionMessage : askNameMessage;
+const initialState = {
+  messages: [firstMessage],
+  userName: userName,
+  currentAnswer: 0
+};
+const App = () => {
+  const [messages, setMessages] = useState(initialState.messages);
+  const [currentAnswer, setCurrentAnswer] = useState(initialState.currentAnswer);
+  const [userName, setUserName] = useState(initialState.userName);
+  const addMessagesToFeedQeue = (message) => {
+    setTimeout(() => setMessages((prevMessages) => {
+      console.log('msg out', prevMessages, message);
+      return [...prevMessages, message]
+    }),MAYA_TYPING_TIME)
+  };
 
-    const userName = localStorage.getItem('userName') || '';
-    const firstMessage = userName ? {text: botGreeting(userName), isBot: true} : greetingMessage;
-    const secondMessage = userName ? askExpressionMessage : askNameMessage;
-    this.state = {
-      messages: [firstMessage],
-      userName: userName,
-      currentAnswer: 0
-    };
-    this.addMessagesToFeedQeue(secondMessage);
-  }
+  if (messages.length === 1) addMessagesToFeedQeue(secondMessage);
 
-  handleUserMessage(message) {
-    const { userName, currentAnswer } = this.state;
+  const handleUserMessage = (message) => {
     if (userName) {
       const expressionMessage = {text: message, isBot: false, showAvatar: true};
       const expressionResult = calculator(message);
       const resultMessage = {text: expressionResult, isBot: true};
       const mayaAnswerIndex = randomAnswer(MAYA_ASKS_MORE, currentAnswer)
       const askMoreMessage = {text: randomAnswer(MAYA_ASKS_MORE, mayaAnswerIndex), isBot: true, last: true};
-      this.setState(prevState =>({messages: [ ...prevState.messages, expressionMessage, resultMessage], currentAnswer: mayaAnswerIndex}), () => this.addMessagesToFeedQeue(askMoreMessage));
+      setMessages(() =>{
+        console.log("SET MESS!")
+        return [...messages, expressionMessage, resultMessage]
+      });
+      setCurrentAnswer(() =>(mayaAnswerIndex));
+      addMessagesToFeedQeue(askMoreMessage);
     } else {
       const userNameMessage = {text: message, isBot: false, showAvatar: true};
       const greetingWithNameMessage = {text: botGreeting(message, true), isBot: true, showAvatar: true};
-      this.setState(prevState =>({messages: [...prevState.messages, userNameMessage, greetingWithNameMessage], userName: message}), () => this.addMessagesToFeedQeue(askExpressionMessage));
+      setMessages(() =>([...messages, userNameMessage, greetingWithNameMessage]));
+      setUserName(() =>(message));
+      addMessagesToFeedQeue(askExpressionMessage);
       localStorage.setItem('userName', message)
     }
   }
 
-  addMessagesToFeedQeue(message) {
-    setTimeout(()=> this.setState(prevState =>({messages: [...prevState.messages, message]})), MAYA_TYPING_TIME);
-  }
-
-  dedupBotAnswers (msgs) {
+  const dedupBotAnswers = (msgs) => {
     let counter = 0;
     return msgs.reduce((acc, msg) => {
       counter = msg.isBot ? counter : 0;
@@ -74,16 +80,15 @@ class App extends Component {
     }, []);
   }
 
-  render() {
-    const { messages } = this.state;
-    const dedupedMsgs = this.dedupBotAnswers(messages);
-    return (
-      <AppContainter>
-          <Feed messages={dedupedMsgs}/>
-          <TextBar onSubmit={this.handleUserMessage}/>
-      </AppContainter>
-    );
-  }
+  
+  const dedupedMsgs = dedupBotAnswers(messages);
+
+  return (
+    <AppContainter>
+        <Feed messages={dedupedMsgs}/>
+        <TextBar onSubmit={handleUserMessage}/>
+    </AppContainter>
+  );
 }
 
 export default App;

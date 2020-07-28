@@ -36,11 +36,9 @@ const SubmitIcon = styled.img`
   width: 20px;
 `;
 
-const initialState = '';
-
 const TextBar = ({onSubmit}) => {
 
-  const [value, setValue] = useState(initialState)
+  const [value, setValue] = useState('');
 
   const handleChange = (event) => setValue(event.target.value);
   

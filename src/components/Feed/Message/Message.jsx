@@ -40,22 +40,9 @@ const AvatarImg = styled.img`
 
 const Message = ({ text, isBot, showAvatar, last }) =>  {
   const [ showTyping, setShowTyping ] = useState(true);
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     showTyping: true
-  //   }
-  //   this.message = React.createRef();
-  // }
   const message = React.createRef();
   const textWidth = null; 
   setTimeout(() => setShowTyping(false), MAYA_TYPING_TIME);
-  
-
-  // componentDidMount() {
-  //   setTimeout(() => this.setState({showTyping: false,}), MAYA_TYPING_TIME);
-  //   this.textWidth =  this.message.current && this.message.current.clientWidth;
-  // }
 
   const avatar = isBot ? botAvatar : userAvatar;
   const imgAltText = isBot ? 'Maya\'s avatar' : 'User\'s avatar';
